@@ -46,38 +46,41 @@
     </footer>
 
     <script>
-        function submitForm() {
-            let name = document.getElementById("name").value;
-            let lorryNumber = document.getElementById("lorry_number").value;
-            let lorryLocation = document.getElementById("lorry_location").value;
-            let contact = document.getElementById("contact").value;
-            
-            let payload = { name, lorryNumber, lorryLocation, contact };
+    function submitForm() {
+    let name = document.getElementById("name").value;
+    let lorryNumber = document.getElementById("lorry_number").value;
+    let lorryLocation = document.getElementById("lorry_location").value;
+    let contact = document.getElementById("contact").value;
 
-            fetch("https://script.google.com/macros/s/AKfycbxjW6_IiQMzKz1F_c5X8XRSvFPJGEsq3ZcSR6lLbeR1MvB8IlBWGKRZgjsb8My9G7c5/exec", {
-                method: "POST",
-                body: JSON.stringify(payload),
-                headers: { "Content-Type": "application/json" }
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log("Response:", data);
-                if (data.status === "success") {
-                    document.getElementById("successMessage").classList.remove("hidden");
-                    setTimeout(() => {
-                        window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(
-                            `New Lorry Registration:\nName: ${name}\nLorry No: ${lorryNumber}\nLocation: ${lorryLocation}\nContact: ${contact}`
-                        )}`, "_blank");
-                    }, 2000);
-                } else {
-                    alert("❌ Error: " + data.message);
-                }
-            })
-            .catch(error => {
-                console.error("Fetch Error:", error);
-                alert("❌ Something went wrong! See console for details.");
-            });
+    let payload = { name, lorryNumber, lorryLocation, contact };
+
+    fetch("https://corsproxy.io/?https://script.google.com/macros/s/AKfycbxjW6_IiQMzKz1F_c5X8XRSvFPJGEsq3ZcSR6lLbeR1MvB8IlBWGKRZgjsb8My9G7c5/exec", {
+        method: "POST",
+        body: JSON.stringify(payload),
+        headers: { 
+            "Content-Type": "application/json"
         }
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log("Response:", data);
+        if (data.status === "success") {
+            document.getElementById("successMessage").classList.remove("hidden");
+            setTimeout(() => {
+                window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(
+                    `New Lorry Registration:\nName: ${name}\nLorry No: ${lorryNumber}\nLocation: ${lorryLocation}\nContact: ${contact}`
+                )}`, "_blank");
+            }, 2000);
+        } else {
+            alert("❌ Error: " + data.message);
+        }
+    })
+    .catch(error => {
+        console.error("Fetch Error:", error);
+        alert("❌ CORS or Network issue! See console for details.");
+    });
+}
+
     </script>
 </body>
 </html>
