@@ -6,6 +6,7 @@
     <title>Lorry Booking - Sree Nettikanti Transport</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/scrollreveal/4.0.9/scrollreveal.min.js"></script>
+    
     <style>
         @keyframes moveTruck {
             0% { transform: translateX(-100px); }
@@ -21,6 +22,7 @@
         }
     </style>
 </head>
+
 <body class="bg-gray-100 text-gray-900">
     <header class="bg-blue-600 text-white p-5 text-center text-xl font-bold relative">
         <img src="https://cdn-icons-png.flaticon.com/512/1995/1995470.png" alt="Truck" class="moving-truck">
@@ -56,10 +58,20 @@
             let lorryNumber = document.getElementById("lorry_number").value;
             let lorryLocation = document.getElementById("lorry_location").value;
             let contact = document.getElementById("contact").value;
-            
+
             let message = `New Lorry Registration:\nName: ${name}\nLorry No: ${lorryNumber}\nLocation: ${lorryLocation}\nContact: ${contact}`;
             let whatsappLink = `https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`;
-            
+
+            // Send Data to Google Sheets
+            fetch("https://script.google.com/macros/s/AKfycbwgfXlF3cw9r4m_IhmPbQVdlwTG-U6ERUN97LLV21VYWWg9owPJCf5m_qbEpE4EkokImg/exec", {
+                method: "POST",
+                body: JSON.stringify({ name, lorryNumber, lorryLocation, contact }),
+                headers: { "Content-Type": "application/json" }
+            })
+            .then(response => response.text())
+            .then(data => console.log("Google Sheet Response:", data))
+            .catch(error => console.error("Error:", error));
+
             window.open(whatsappLink, "_blank");
         }
 
