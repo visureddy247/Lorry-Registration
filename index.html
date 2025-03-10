@@ -36,9 +36,16 @@
             <input type="text" id="lorry_number" placeholder="Lorry Number" class="w-full p-3 border rounded-md" required>
             <input type="text" id="lorry_location" placeholder="Lorry Location Address" class="w-full p-3 border rounded-md" required>
             <input type="text" id="contact" placeholder="Contact Number" class="w-full p-3 border rounded-md" required>
-            <button type="submit" class="w-full bg-blue-600 text-white p-3 rounded-md hover:bg-blue-700">Submit</button>
+            <button type="submit" class="w-full bg-blue-600 text-white p-3 rounded-md hover:bg-blue-700">Register</button>
         </form>
+        <p id="successMessage" class="mt-4 text-green-600 hidden">✅ Registration Successful! Details saved.</p>
         <p class="mt-4 text-gray-600">We will share available loads for your lorry once registered.</p>
+    </section>
+    
+    <section class="text-center mt-10">
+        <a id="whatsappLink" href="#" target="_blank" class="inline-block bg-green-500 text-white px-6 py-3 rounded-md shadow-md hover:bg-green-600 hidden">
+            Join WhatsApp Group for Future Loads
+        </a>
     </section>
     
     <footer class="bg-gray-800 text-white text-center p-5 mt-10 animate-fade-in">
@@ -49,40 +56,47 @@
     <script>
         document.getElementById("lorryForm").addEventListener("submit", function(event) {
             event.preventDefault();
-
+            
             let name = document.getElementById("name").value;
             let lorryNumber = document.getElementById("lorry_number").value;
             let lorryLocation = document.getElementById("lorry_location").value;
             let contact = document.getElementById("contact").value;
+            let successMessage = document.getElementById("successMessage");
+            let whatsappLink = document.getElementById("whatsappLink");
 
             let message = `New Lorry Registration:\nName: ${name}\nLorry No: ${lorryNumber}\nLocation: ${lorryLocation}\nContact: ${contact}`;
-            let whatsappLink = `https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`;
-
-            // Send Data to Google Sheets
-            fetch("https://script.google.com/macros/s/AKfycbyOgBb2NQmRjOR-Y3J9b8a28K8RwgFlahE-aA0njEoBFFTUNJuhLC0H6mIBZqyM9Ldt-w/exec", {
+            let whatsappURL = `https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`;
+            
+            let submitButton = document.querySelector("button[type='submit']");
+            submitButton.disabled = true;
+            submitButton.innerText = "Saving...";
+            
+            fetch("https://script.google.com/macros/s/AKfycbxTEl8alvII2HdpSLs2fZVbvVptmlUoQ3mdp-5t5eNGEoyNkk-s1W3OPioJCRdVDVmkNA/exec", {
                 method: "POST",
-                body: JSON.stringify({ 
-                    name: name, 
-                    lorryNumber: lorryNumber, 
-                    lorryLocation: lorryLocation, 
-                    contact: contact 
-                }),
+                body: JSON.stringify({ name, lorryNumber, lorryLocation, contact }),
                 headers: { "Content-Type": "application/json" }
             })
             .then(response => response.json())
             .then(data => {
-                console.log("Google Sheet Response:", data);
-                alert("Registration Successful! Details saved.");
-                
-                // Open WhatsApp only after successful Google Sheet save
-                window.open(whatsappLink, "_blank");
+                if (data.status === "success") {
+                    successMessage.classList.remove("hidden");
+                    whatsappLink.href = whatsappURL;
+                    whatsappLink.classList.remove("hidden");
 
-                // Clear the form fields
-                document.getElementById("lorryForm").reset();
+                    document.getElementById("lorryForm").reset();
+                    submitButton.disabled = false;
+                    submitButton.innerText = "Register";
+                } else {
+                    alert("⚠️ Failed to save. Try again.");
+                    submitButton.disabled = false;
+                    submitButton.innerText = "Register";
+                }
             })
             .catch(error => {
                 console.error("Error:", error);
-                alert("Failed to save in Google Sheet.");
+                alert("❌ Error saving in Google Sheet.");
+                submitButton.disabled = false;
+                submitButton.innerText = "Register";
             });
         });
 
