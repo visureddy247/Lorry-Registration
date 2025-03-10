@@ -57,32 +57,49 @@
     
     <script>
     function submitForm() {
-        let name = document.getElementById("name").value;
-        let lorryNumber = document.getElementById("lorry_number").value;
-        let lorryLocation = document.getElementById("lorry_location").value;
-        let contact = document.getElementById("contact").value;
-        
-        let payload = { name, lorryNumber, lorryLocation, contact };
-    
-        fetch("https://script.google.com/macros/s/AKfycbyzal1NLXdDgMB22zdn-2C29YUPUM6lVG5I5nzR5bOtxeVmT4_VkOZlZemVnNZG8TY4/exec", {
-            method: "POST",
-            mode: "no-cors",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(payload)
-        })
-        .then(() => {
-            document.getElementById("successMessage").classList.remove("hidden");
-            setTimeout(() => {
-                window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(
-                    `New Lorry Registration:\nName: ${name}\nLorry No: ${lorryNumber}\nLocation: ${lorryLocation}\nContact: ${contact}`
-                )}`, "_blank");
-            }, 2000);
-        })
-        .catch(error => {
-            console.error("Fetch Error:", error);
-            alert("❌ Something went wrong! Check console for details.");
-        });
-    }
+    let name = document.getElementById("name").value;
+    let lorryNumber = document.getElementById("lorry_number").value;
+    let lorryLocation = document.getElementById("lorry_location").value;
+    let contact = document.getElementById("contact").value;
+
+    let payload = { name, lorryNumber, lorryLocation, contact };
+
+    let scriptURL = "https://script.google.com/macros/s/AKfycbyzal1NLXdDgMB22zdn-2C29YUPUM6lVG5I5nzR5bOtxeVmT4_VkOZlZemVnNZG8TY4/exec";
+
+    // Step 1: Fetch all existing lorry numbers
+    fetch(scriptURL + "?action=getLorryNumbers")
+    .then(response => response.json())
+    .then(data => {
+        if (data.includes(lorryNumber)) {
+            alert("❌ This Lorry Number is already registered!");
+        } else {
+            // Step 2: Proceed with registration if lorry number is unique
+            fetch(scriptURL, {
+                method: "POST",
+                mode: "no-cors",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload)
+            })
+            .then(() => {
+                document.getElementById("successMessage").classList.remove("hidden");
+                setTimeout(() => {
+                    window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(
+                        `New Lorry Registration:\nName: ${name}\nLorry No: ${lorryNumber}\nLocation: ${lorryLocation}\nContact: ${contact}`
+                    )}`, "_blank");
+                }, 2000);
+            })
+            .catch(error => {
+                console.error("Fetch Error:", error);
+                alert("❌ Something went wrong! Check console for details.");
+            });
+        }
+    })
+    .catch(error => {
+        console.error("Fetch Error:", error);
+        alert("❌ Failed to check existing registrations.");
+    });
+}
+
     </script>
 </body>
 </html>
