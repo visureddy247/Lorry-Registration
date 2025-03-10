@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sree Nettikanti Transport</title>
+    <title>LorrySree Nettikanti Transport</title>
     <script src="https://cdn.tailwindcss.com"></script>
-
     <style>
         body {
             background: rgba(255, 255, 255, 0.85);
@@ -18,26 +17,24 @@
     </style>
 </head>
 <body class="bg-gray-100 text-gray-900">
-    <header class="bg-blue-700 text-white p-5 text-center text-xl font-bold">
+    <header class="bg-blue-600 text-white p-5 text-center text-xl font-bold">
         Sree Nettikanti Transport - Load Booking
     </header>
 
-    <!-- 🔹 Top Section: Image + Contact Info (Inside Red Box) -->
-    <div class="flex justify-center items-center mt-5 space-x-6">
-        <!-- 🔹 Image (Left Side) -->
+    <!-- Top Section with Image & Contact Details -->
+    <div class="flex flex-col md:flex-row items-center justify-center mt-5 space-x-4">
         <img src="https://lh3.googleusercontent.com/d/1BIK0j1yy1T2rwZCuJ4OTHed6eAE1jvop" 
-            alt="Sree Nettikanti Transport Logo" 
-            class="w-47 h-36 rounded-lg shadow-md border-4 border-sky-400">
-
-        <!-- 🔹 Contact Details (Right Side, Inside Red Box) -->
-        <div class="border-2 border-red-500 p-3 rounded-md">
-            <p class="text-gray-700 font-semibold">📧 <a href="mailto:apsratp@gmail.com" class="text-blue-600">apsratp@gmail.com</a></p>
-            <p class="text-gray-700 font-semibold">📞 <a href="tel:9866662839" class="text-blue-600">9866662839</a></p>
+             alt="Sree Nettikanti Transport" 
+             class="w-32 h-32 rounded-lg shadow-md border-4 border-sky-400">
+        
+        <div class="text-center md:text-left p-2 border-2 border-gray-300 rounded-lg">
+            <p class="text-lg font-semibold">📞 Contact: <a href="tel:9866662839" class="text-blue-600 underline">9866662839</a></p>
+            <p class="text-lg font-semibold">📧 Email: <a href="mailto:apsratp@gmail.com" class="text-blue-600 underline">apsratp@gmail.com</a></p>
         </div>
     </div>
 
-    <!-- 🔹 Lorry Registration Form -->
-    <section class="max-w-3xl mx-auto mt-5 p-5 bg-white shadow-lg rounded-lg overlay">
+    <!-- Registration Form -->
+    <section class="max-w-3xl mx-auto mt-10 p-5 bg-white shadow-lg rounded-lg overlay animate-fade-in">
         <h2 class="text-2xl font-semibold mb-4 text-center">Register Your Lorry</h2>
         <form onsubmit="submitForm(); return false;" class="space-y-4">
             <input type="text" id="name" placeholder="Your Name" class="w-full p-3 border rounded-md" required>
@@ -49,10 +46,10 @@
         <p id="successMessage" class="hidden text-green-600 mt-4">✔ Registration Successful!</p>
     </section>
 
-    <!-- 🔹 WhatsApp Group Button -->
-    <section class="text-center mt-5">
+    <!-- WhatsApp Button -->
+    <section class="text-center mt-10">
         <a href="https://chat.whatsapp.com/J0ssMBo6Coj1vRJ4UWoH0R" target="_blank" 
-            class="inline-block bg-green-500 text-white px-6 py-3 rounded-md shadow-md hover:bg-green-600">
+           class="inline-block bg-green-500 text-white px-6 py-3 rounded-md shadow-md hover:bg-green-600">
             Join WhatsApp Group
         </a>
     </section>
@@ -68,7 +65,7 @@
 
             fetch("https://script.google.com/macros/s/AKfycbyzal1NLXdDgMB22zdn-2C29YUPUM6lVG5I5nzR5bOtxeVmT4_VkOZlZemVnNZG8TY4/exec", {
                 method: "POST",
-                mode: "no-cors", // Fix CORS issue
+                mode: "no-cors",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(payload)
             })
@@ -86,6 +83,5 @@
             });
         }
     </script>
-
 </body>
 </html>
